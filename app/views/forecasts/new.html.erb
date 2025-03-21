@@ -1,0 +1,6 @@
+<%= form_with url: forecast_path, method: :get, scope: @address, data: { turbo_frame: "forecast" } do |form| %>
+  <%= form.text_field :postal_code %>
+<% end %>
+
+<%= turbo_frame_tag "forecast" do %>
+<% end %>
