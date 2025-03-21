@@ -1,6 +1,13 @@
-<%= form_with url: forecast_path, method: :get, scope: @address, data: { turbo_frame: "forecast" } do |form| %>
-  <%= form.text_field :postal_code %>
-<% end %>
+<div class="flex flex-row h-100 gap-12">
+  <div class="bg-gray-100 p-3">
+    <%= form_with url: forecast_path, method: :get, scope: @address, data: { turbo_frame: "forecast" } do |form| %>
+      <%= form.label :postal_code %>
+      <%= form.text_field :postal_code, class: "bg-white rounded" %>
 
-<%= turbo_frame_tag "forecast" do %>
-<% end %>
+      <%= form.submit "Retrieve Forecast" %>
+    <% end %>
+  </div>
+
+  <%= turbo_frame_tag "forecast" do %>
+  <% end %>
+</div>
