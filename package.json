@@ -2,6 +2,8 @@
   "name": "app",
   "private": true,
   "scripts": {
+    "dev": "bun bun.config.js --watch",
+    "dev:css": "bun run tailwindcss -i ./app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/application.css --watch",
     "build": "bun bun.config.js",
     "build:css": "bun run tailwindcss -i ./app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/application.css --minify"
   },
