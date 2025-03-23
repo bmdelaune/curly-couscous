@@ -21,7 +21,7 @@ class OpenMateo
     parsed_response = Rails.cache.fetch(name, expires_in: 30.minutes) do
       response = client.get("https://geocoding-api.open-meteo.com/v1/search", name:)
 
-      parsed_response = JSON.parse(response.body)
+      JSON.parse(response.body)
     end.with_indifferent_access
 
     latitude, longitude = parsed_response.dig("results", 0).slice(:latitude, :longitude).values
@@ -60,12 +60,11 @@ class OpenMateo
   def self.parse_forecast(payload, cached)
     forecast = Forecast.new(
         payload.slice(:latitude, :longitude,
-        :timezone, :timezone_abbreviation, :elevation,
-        :temp_units, :daily, :current, :wind_units)
+        :timezone, :timezone_abbreviation, :elevation)
     ).tap do |f|
       f.temp_units = payload.dig(:current_units, :temperature_2m)
       f.wind_units = payload.dig(:current_units, :wind_speed_10m)
-        f.daily = parse_daily_forecast(payload.dig(:daily))
+      f.daily = parse_daily_forecast(payload.dig(:daily))
       f.current = parse_current_forecast(payload.dig(:current))
       f.cached = cached
     end
