@@ -1,5 +1,6 @@
 class OpenMateo
   class ForecastError < StandardError; end
+  class GeocodeError < StandardError; end
 
   FORECAST_SETTINGS = {
     current: %w(temperature_2m precipitation relative_humidity_2m apparent_temperature wind_speed_10m wind_gusts_10m),
@@ -17,12 +18,15 @@ class OpenMateo
     )
   end
 
+  # converts a human-entered address into a latitude and longitude
   def self.geocode(name)
     parsed_response = Rails.cache.fetch(name, expires_in: 30.minutes) do
       response = client.get("https://geocoding-api.open-meteo.com/v1/search", name:)
 
       JSON.parse(response.body)
     end.with_indifferent_access
+
+    raise GeocodeError.new("Invalid address provided. Unable to locate.") unless parsed_response.dig("results").present? && parsed_response.dig("results").length > 0
 
     latitude, longitude = parsed_response.dig("results", 0).slice(:latitude, :longitude).values
   end
@@ -40,7 +44,7 @@ class OpenMateo
   #   "daily" => {"time" => ["2025-03-23", "2025-03-24", "2025-03-25", "2025-03-26", "2025-03-27", "2025-03-28", "2025-03-29"],
   #     "temperature_2m_min" => [59.7, 47.8, 55.9, 61.1, 65.3, 64.0, 66.0], "temperature_2m_max" => [79.9, 79.7, 86.0, 81.6, 82.2, 70.5, 84.5]}}
   def self.forecast(address)
-    raise ForecastError("Postal Code is required for address") unless address.present? && address.postal_code.present?
+    raise ForecastError.new("Postal Code is required for address") unless address.present? && address.postal_code.present?
 
     cached = true
     parsed_response = Rails.cache.fetch(address.postal_code, expires: 30.minutes) do
@@ -75,11 +79,11 @@ class OpenMateo
       min = payload.dig(:temperature_2m_min, index)
       max = payload.dig(:temperature_2m_max, index)
 
-      ForecastDay.new(date: Date.iso8601(date).strftime, min:, max:)
+      ForecastDay.new(date: Date.iso8601(date), min:, max:)
     end
   end
 
   def self.parse_current_forecast(payload)
-    ForecastDay.new(date: Date.iso8601(payload.dig(:time)).strftime, **payload.except(:time, :interval))
+    ForecastDay.new(date: Date.iso8601(payload.dig(:time)), **payload.except(:time, :interval))
   end
 end

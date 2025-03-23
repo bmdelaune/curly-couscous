@@ -1,3 +1,43 @@
 <%= turbo_frame_tag "forecast" do %>
-  <%= @forecast %>
+  <% unless @error.present? %>
+    <% @presenter = ForecastDayPresenter.new(@forecast.current) %>
+
+    <h2 class="font-bold text-2x1">Current conditions:</h2>
+    
+    <dl>
+      <%= tag.dt "Temp", class: "font-bold" %>
+      <%= tag.dd @presenter.temp, class: "ps-4" %>
+
+      <%= tag.dt "Feels like", class: "font-bold" %>
+      <%= tag.dd @presenter.feels_like, class: "ps-4" %>
+
+      <%= tag.dt "Wind speed", class: "font-bold" %>
+      <%= tag.dd @presenter.wind_speed, class: "ps-4" %>
+    </dl>
+
+    <h3 class="text-2x1">Upcoming:</h3>
+    <table class="border-separate border-spacing-2 border border-gray-400 dark:border-gray-500">
+      <thead>
+        <tr>
+          <td>Date</td>
+          <td>Low</td>
+          <td>High</td>
+        </tr>
+      </thead>
+      <tbody>
+        <% @forecast.daily.each do |future_forecast_day| %>
+          <tr>
+            <% @day_presenter = ForecastDayPresenter.new(future_forecast_day) %>
+            <%= tag.td @day_presenter.day %>
+            <%= tag.td @day_presenter.min %>
+            <%= tag.td @day_presenter.max %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+    <%= tag.p @presenter.cache_note %>
+  <% else %>
+    <%= tag.p @error, class: "red" %>
+  <% end %>
 <% end %>

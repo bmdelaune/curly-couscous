@@ -6,7 +6,9 @@ class ForecastsController < ApplicationController
   def show
     @address = Address.new(address_params)
 
-    @forecast = "here's a forecast!"
+    @forecast = Forecast.retrieve(@address)
+  rescue OpenMateo::GeocodeError, OpenMateo::ForecastError => error
+    @error = error.message
   end
 
   private
