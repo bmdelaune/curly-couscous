@@ -1,12 +1,12 @@
 # README
 
-Things I would complete if I had time:
+## Things I would complete if I had time:
 1. Wayyy more specs. I did not test negative cases or even write a system spec.
 2. I would reduce the dependency on the `lib/open_mateo.rb` file and make it more of an adapter pattern.
 3. I wouldn't be including `ActiveModel::API` everywhere for convenience
 4. Do more error handling, especially with the OpenMateo API
 
-* To install
+## To install
 Ruby and bun versions stored in `.tool-versions`. You can use [`mise-en-place`]() to manage versions.
 1. Install `ruby`
 2. Install `bun`
@@ -15,6 +15,6 @@ Ruby and bun versions stored in `.tool-versions`. You can use [`mise-en-place`](
 5. Run `bundle exec rails server -p 3000`
 6. Go to `http://localhost:3000/`
 
-* To run specs
+## To run specs
 `bundle exec rspec spec/`
 
