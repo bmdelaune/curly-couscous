@@ -4,7 +4,7 @@
   "scripts": {
     "dev": "bun bun.config.js --watch",
     "dev:css": "bun run tailwindcss -i ./app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/application.css --watch",
-    "build": "bun bun.config.js",
+    "build": "bun bun.config.js && bun run build:css",
     "build:css": "bun run tailwindcss -i ./app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/application.css --minify"
   },
   "dependencies": {
