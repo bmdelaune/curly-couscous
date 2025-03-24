@@ -5,6 +5,7 @@
 2. I would reduce the dependency on the `lib/open_mateo.rb` file and make it more of an adapter pattern.
 3. I wouldn't be including `ActiveModel::API` everywhere for convenience
 4. Do more error handling, especially with the OpenMateo API
+5. Actually allow a full address input. Probably as simple as adding the fields to the form.
 
 ## To install
 Ruby and bun versions stored in `.tool-versions`. You can use [`mise-en-place`]() to manage versions.
