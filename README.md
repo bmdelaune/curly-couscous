@@ -1,7 +1,5 @@
 # README
 
-I completely forgot to add the cached flag on the view. i implemented the backend
-
 ## Things I would complete if I had time:
 1. Wayyy more specs. I did not test negative cases or even write a system spec.
 2. I would reduce the dependency on the `lib/open_mateo.rb` file and make it more of an adapter pattern.
